@@ -1,0 +1,31 @@
+---
+- name: Check whether the Rocky Linux security repository definition exists
+  ansible.builtin.command:
+    cmd: dnf repolist --enabled security
+  register: rocky_security_repository_repolist
+  changed_when: false
+  failed_when: false
+
+- name: Ensure the latest Rocky Linux repository definitions are installed
+  ansible.builtin.dnf:
+    name: rocky-repos
+    state: latest
+  when:
+    - >-
+      rocky_security_repository_repo_definitions_upgrade or
+      'security' not in
+      (rocky_security_repository_repolist.stdout | default(''))
+
+- name: Enable the Rocky Linux security repository
+  # https://rockylinux.org/news/2026-05-14-introducing-security-repository
+  community.general.dnf_config_manager:
+    name: security
+    state: enabled
+  when: >-
+    'security' not in (rocky_security_repository_repolist.stdout | default(''))
+
+- name: Run dnf update
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+  when: rocky_security_repository_system_upgrade

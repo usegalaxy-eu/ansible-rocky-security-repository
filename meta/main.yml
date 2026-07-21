@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: José Manuel Domínguez
+  description: Enable the Rocky Linux Security Repository.
+  company: The Galaxy Project
+  license: MIT
+  namespace: usegalaxy_eu
+  role_name: rocky_security_repository
+  min_ansible_version: "2.18"
+  platforms:
+    - name: EL
+      versions:
+        - "9"
+    - name: EL
+      versions:
+        - "10"
+  galaxy_tags: []
+dependencies: []
