@@ -1,0 +1,9 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  tasks:
+    - name: Install DNF plugins, required to use DNF config-manager
+      ansible.builtin.dnf:
+        name: dnf-plugins-core
+        state: present

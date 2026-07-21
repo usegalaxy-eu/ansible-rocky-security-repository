@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: "Include usegalaxy_eu.rocky_security_repository"
+      ansible.builtin.include_role:
+        name: "usegalaxy_eu.rocky_security_repository"
+        apply:
+          become: true

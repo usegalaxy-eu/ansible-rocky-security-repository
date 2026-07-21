@@ -1,0 +1,25 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: podman
+
+platforms:
+  - name: el-9
+    image: rockylinux:9
+    pre_build_image: true
+  - name: el-10
+    image: rockylinux:10
+    pre_build_image: true
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      interpreter_python: auto_silent
+      callback_whitelist: profile_tasks, timer, yaml
+    privilege_escalation:
+      become_method: su
+    ssh_connection:
+      pipelining: true
+verifier:
+  name: ansible
