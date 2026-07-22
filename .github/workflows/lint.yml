@@ -1,0 +1,29 @@
+---
+name: Lint
+
+"on":
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase
+        uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v9.0.0
+        with:
+          activate-environment: true
+          cache-python: true
+          enable-cache: auto
+
+      - name: Ensure lint dependencies are installed
+        run: uv pip install -r requirements.txt
+
+      - name: Run Ansible Lint
+        run: ansible-lint
+
+      - name: Run `yamllint`
+        run: yamllint .
