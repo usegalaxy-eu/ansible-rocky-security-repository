@@ -6,10 +6,10 @@ driver:
 
 platforms:
   - name: el-9
-    image: rockylinux:9
+    image: docker.io/rockylinux/rockylinux:9
     pre_build_image: true
   - name: el-10
-    image: rockylinux:10
+    image: docker.io/rockylinux/rockylinux:10
     pre_build_image: true
 provisioner:
   name: ansible

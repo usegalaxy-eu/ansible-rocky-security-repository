@@ -1,0 +1,46 @@
+---
+name: Ansible Molecule
+
+"on":
+  pull_request:
+
+jobs:
+  molecule:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase
+        uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v9.0.0
+        with:
+          activate-environment: true
+          cache-python: true
+          enable-cache: auto
+
+      - name: Update package indexes
+        run: sudo apt-get update
+
+      - name: Install Podman
+        run: sudo apt-get install --yes podman
+
+      - name: Install required Python packages
+        run: uv pip install -r requirements.txt -r molecule/requirements.txt
+
+      - name: Cache Ansible collections
+        uses: actions/cache@v4
+        with:
+          path: ~/.ansible/collections
+          key: ansible-collections-${{ runner.os }}-${{ hashFiles('meta/collection-requirements.yml') }}
+
+      - name: Install Ansible collections
+        run: |
+          ansible-galaxy collection install \
+            -r meta/collection-requirements.yml
+
+      - name: Run Ansible Molecule
+        run: |
+          molecule --base-config molecule/base.yml test
+        env:
+          ANSIBLE_FORCE_COLOR: "1"
